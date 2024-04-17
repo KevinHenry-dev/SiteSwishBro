@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card mt-3 mb-5" style="max-width: 600px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ asset('images/joueur.jpg')}}" class="img-fluid rounded-start" alt="logo joueur">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body text-center">
+              <h5 class="card-title">Mon profil</h5>
+              <p class="card-text">
+                <h2>Nom: {{app.user.nom}}</h2>
+                <h2>Prénom: {{app.user.prenom}}</h2>
+                <h2>E-mail: {{app.user.email}}</h2>
+              </p>
+              <a class="btn btn-primary" href="{{path('app_profil_modifier') }}">Modifier mes informations</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+<nav class="navbar navbar-expand-lg navbar-white bg-white">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('home_swish') }}">
+            <img src="{{ asset('images/newlogo.png')}}" style="width: 80px;" /> 
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link text-dark" href="{{ path('home_swish') }}">Accueil</a>
+                <a class="nav-link text-dark" href="{{ path('app_concept') }}">Concept</a>
+                <a class="nav-link text-dark" href="{{ path('app_terrain')}}">Playgrounds</a>
+                <a class="nav-link text-dark" href="#">Team</a>
+                <a class="nav-link text-dark" href="#">Jouer</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="nav-link text-dark" href="{{ path('app_administrateur_index')}}">Back office</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="navbar-nav me-3">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <a class="nav-link  text-dark me-1" href="{{path('app_profil_index')}}">Mon profil</a>
+                <a class="nav-link  text-dark" href="{{ path('app_logout') }}">Déconnexion</a>
+            {% else %}
+                <a class="nav-link  text-dark me-1" href="{{ path('app_register') }}">Inscription</a>
+                <a class="nav-link  text-dark" href="{{ path('app_login') }}">Connexion</a>
+            {% endif %}  
+             
+        </div>
+    </div>
+</nav>
+
+
+
+<div>
+  <div class="container-fluid" role="navigation">
+    
+    <div class="row text-center align-items-center g-0">
+      <div class="col-lg-5 col-md-5 d-none d-lg-block d-md-block d-xs-none ms-auto">
+        <div class="d-flex justify-content-around border-top border-bottom border-dark">
+          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_terrain')}}">Playgrounds</a></div>
+          <div class="customLink"><a class="d-inline-block p-3" href="#">Team</a></div>
+          <div class="customLink"><a class="d-inline-block p-3" href="#">Jouer</a></div>
+           {% if is_granted('ROLE_ADMIN') %}
+          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_administrateur_index')}}">Back office</a></div>
+           {% endif %}
+        </div>
+        </div>
+          
+      <div class="col-lg-2 col-md-2 mx-auto" style="max-width:120px;">
+         <a class="navbar-brand" href="{{ path('home_swish') }}">
+            <img src="{{ asset('images/newlogo.png')}}" style="width: 80px;" /> 
+        </a>
+      </div>
+
+      <div class="col-lg-5 col-md-5 d-none d-lg-block d-md-block d-xs-none me-auto">
+        <div class="d-flex justify-content-around border-top border-bottom border-dark">
+          {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+          <div class="customLink"><a class="d-inline-block p-3" href="{{path('app_profil_index')}}">Mon profil</a></div>
+          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_logout') }}">Déconnexion</a></div>
+          {% else %}
+          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_register') }}">Inscription</a></div>
+          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_login') }}">Connexion</a></div>
+          {% endif %} 
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+  <div class="row mx-3 mt-4">
+    <div class="col">
+      <div class="d-flex justify-content-center align-items-center border border-dark shadow-lg rounded-3" style="height:450px;background:url('https://images.unsplash.com/photo-1542662565-7e4b66bae529?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1527&q=80') no-repeat;background-position:center;background-size:cover">
+        <div class="text-center text-white">
+          <h1>A Beautiful Navbar</h1>
+          <p>Used bootstrap 5's flexbox classes and display classes</p>
+          <div class="pt-3">
+            <button class="btn btn-outline-light px-5">Get Started</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    </head>
+
+
+
+
