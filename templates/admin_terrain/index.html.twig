@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<header class="navbar sticky-top bg-warning flex-md-nowrap p-0 shadow" data-bs-theme="dark">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">Gestion des terrains</a>
+
+  <ul class="navbar-nav flex-row d-md-none">
+    <li class="nav-item text-nowrap">
+      <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSearch" aria-controls="navbarSearch" aria-expanded="false" aria-label="Toggle search">
+        <svg class="bi"><use xlink:href="#search"/></svg>
+      </button>
+    </li>
+    <li class="nav-item text-nowrap">
+      <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <svg class="bi"><use xlink:href="#list"/></svg>
+      </button>
+    </li>
+  </ul>
+
+
+</header>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Menu de navigation -->
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      <!-- Contenu de la barre latérale -->
+      <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="sidebarMenuLabel">Gestion des terrains</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="{{path('app_admin_user_index')}}">
+                
+                <i class="fa-solid fa-house-user"></i> Gestion des membres
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="#">
+                
+                <i class="fa-solid fa-house-user"></i> Gestion des matchs
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="#">
+                
+                <i class="fa-solid fa-house-user"></i> Gestion des commentaires
+              </a>
+            </li>
+
+
+          <hr class="my-3">
+
+          <ul class="nav flex-column mb-auto">
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="{{path('app_admin_dashboard')}}">
+                
+                <i class="fa-solid fa-rotate-left"></i> Retour dashboard
+              </a>
+            </li>
+          <ul class="nav flex-column mb-auto">
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="{{path('app_logout')}}">
+                
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+              </a>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+          <!-- Contenu principal -->
+    <div class="col">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nom_tdb</th>
+            <th>Adresse_tdb</th>
+            <th>Long_tdb</th>
+            <th>Latt_tdb</th>
+            <th>Libelle_ville</th>
+            <th>actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for terrain in terrains %}
+          <tr>
+            <td>{{ terrain.id }}</td>
+            <td>{{ terrain.NomTdb }}</td>
+            <td>{{ terrain.AdresseTdb }}</td>
+            <td>{{ terrain.LongTdb }}</td>
+            <td>{{ terrain.LattTdb }}</td>
+            <td>{{ terrain.LibelleVille }}</td>
+            <td>
+            <!-- Bouton modification -->
+              <a href="{{ path('app_admin_terrain_show', {'id': terrain.id}) }}" class="btn btn-outline-primary btn-sm shadow">Infos</a>
+              <a href="{{ path('app_admin_terrain_edit', {'id': terrain.id}) }}" class="btn btn-outline-primary btn-sm shadow">Modifier</a>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="7">no records found</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+        <!-- Bouton pour ajouter un nouveau terrain -->
+      <a href="{{ path('app_admin_terrain_new') }}" class="btn btn-outline-primary shadow"><i class="fa-solid fa-plus"></i> Nouveau terrain</a>
+    </div>
+  </div>
+</div>
+<!-- Message de confirmation -->
+{% for message in app.flashes('success')%}
+<div class="alert alert-success col-md-6 mx-auto text-center">{{message}}</div>
+{% endfor %}
+
+{% endblock %}

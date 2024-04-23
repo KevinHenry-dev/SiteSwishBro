@@ -10,7 +10,7 @@
           <div class="customLink"><a class="d-inline-block p-3" href="#">Team</a></div>
           <div class="customLink"><a class="d-inline-block p-3" href="#">Jouer</a></div>
            {% if is_granted('ROLE_ADMIN') %}
-          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_administrateur_index')}}">Back office</a></div>
+          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_admin_dashboard')}}">Dashboard</a></div>
            {% endif %}
         </div>
         </div>
