@@ -50,6 +50,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 14, nullable: true)]
     private ?string $Tel = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $ban = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -176,6 +179,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTel(?string $Tel): static
     {
         $this->Tel = $Tel;
+
+        return $this;
+    }
+
+    public function isBan(): ?bool
+    {
+        return $this->ban;
+    }
+
+    public function setBan(?bool $ban): static
+    {
+        $this->ban = $ban;
 
         return $this;
     }

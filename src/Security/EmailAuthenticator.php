@@ -53,7 +53,7 @@ class EmailAuthenticator extends AbstractLoginFormAuthenticator
         // RETOUR APRÈS CONNEXION
 
         if(in_array('ROLE_ADMIN', $user->getRoles())){
-        return new RedirectResponse($this->urlGenerator->generate('app_administrateur_index'));
+        return new RedirectResponse($this->urlGenerator->generate('app_admin_dashboard'));
         }
         
 

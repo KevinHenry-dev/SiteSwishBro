@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Terrain{% endblock %}
+
+{% block body %}
+    <h1>Terrain</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ terrain.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom_tdb</th>
+                <td>{{ terrain.NomTdb }}</td>
+            </tr>
+            <tr>
+                <th>Adresse_tdb</th>
+                <td>{{ terrain.AdresseTdb }}</td>
+            </tr>
+            <tr>
+                <th>Long_tdb</th>
+                <td>{{ terrain.LongTdb }}</td>
+            </tr>
+            <tr>
+                <th>Latt_tdb</th>
+                <td>{{ terrain.LattTdb }}</td>
+            </tr>
+            <tr>
+                <th>Libelle_ville</th>
+                <td>{{ terrain.LibelleVille }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_terrain_index') }}">back to list</a>
+
+    <a href="{{ path('app_admin_terrain_edit', {'id': terrain.id}) }}">edit</a>
+
+    {{ include('admin_terrain/_delete_form.html.twig') }}
+{% endblock %}
