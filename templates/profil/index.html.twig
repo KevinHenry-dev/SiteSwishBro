@@ -1,49 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil{% endblock %}
+{% block title %}Parametre profil{% endblock %}
 
 {% block body %}
-    <h1>Profil</h1>
+    <h1 class="text-center">Profil</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Email</th>
-                <th>Roles</th>
-                <th>Password</th>
                 <th>Nom</th>
                 <th>Prenom</th>
-                <th>Date_de_naissance</th>
+                <th>Date de naissance</th>
                 <th>Adresse</th>
                 <th>Tel</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
-                
-                <td>{{ user.password }}</td>
                 <td>{{ user.Nom }}</td>
                 <td>{{ user.Prenom }}</td>
                 <td>{{ user.DateDeNaissance ? user.DateDeNaissance|date('Y-m-d') : '' }}</td>
                 <td>{{ user.Adresse }}</td>
                 <td>{{ user.Tel }}</td>
                 <td>
-                    
-                    <a href="{{ path('app_profil_edit', {'id': user.id}) }}">edit</a>
+                    <a href="{{ path('app_profil_show', {'id': user.id}) }}" class="btn btn-outline-primary btn-sm shadow">Infos</a>
+                    <a href="{{ path('app_profil_edit', {'id': user.id}) }}" class="btn btn-outline-primary btn-sm shadow">Modifier</a>
                 </td>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
         </tbody>
     </table>
 
-    
+    <a href="{{ path('home_swish') }}" class="btn btn-outline-primary shadow">Retour</a>
 {% endblock %}

@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
@@ -18,7 +19,9 @@ class UserType extends AbstractType
         $builder
             ->add('Nom')
             ->add('Prenom')
-            ->add('email')
+            ->add('email', EmailType::class, [
+                'required' => false, 
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
@@ -39,7 +42,6 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
-            //->add('roles')
             ->add('Date_de_naissance')
             ->add('Adresse')
             ->add('Tel')
