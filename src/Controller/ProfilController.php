@@ -3,14 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\User1Type;
-use App\Repository\UserRepository;
+
+
+use App\Form\EditProfileUserFormType;
+
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
 
 #[Route('/profil')]
 class ProfilController extends AbstractController
@@ -46,26 +50,7 @@ class ProfilController extends AbstractController
 
 
 
-
-    #[Route('/new', name: 'app_profil_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
-        $form = $this->createForm(User1Type::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_profil_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('profil/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
-    }
+/* 
 
     #[Route('/{id}', name: 'app_profil_show', methods: ['GET'])]
     public function show(User $user): Response
@@ -73,34 +58,51 @@ class ProfilController extends AbstractController
         return $this->render('profil/show.html.twig', [
             'user' => $user,
         ]);
-    }
+    } */
 
     #[Route('/{id}/edit', name: 'app_profil_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(User1Type::class, $user);
-        $form->handleRequest($request);
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+{
+    $user = $this->getUser();
+    $form = $this->createForm(EditProfileUserFormType::class, $user);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_profil_index', [], Response::HTTP_SEE_OTHER);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $newPassword = $form->get('plainPassword')->getData();
+        if ($newPassword !== null) {
+            $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+            $this->upgradePassword($user, $hashedPassword, $entityManager);
         }
 
-        return $this->render('profil/edit.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
+        $entityManager->flush();
+        
+        
+        return $this->redirectToRoute('app_profil_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    return $this->render('profil/edit.html.twig', [
+        'user' => $user,
+        'form' => $form->createView(),
+    ]);
+}
+
+private function upgradePassword(User $user, string $hashedPassword, EntityManagerInterface $entityManager): void
+{
+    $user->setPassword($hashedPassword);
+    $entityManager->persist($user);
+}
+
+
 
     #[Route('/{id}', name: 'app_profil_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
+        
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_profil_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_register', [], Response::HTTP_SEE_OTHER);
     }
 }

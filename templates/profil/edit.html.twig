@@ -1,29 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil{% endblock %}
+{% block title %}Modifier mon profil{% endblock %}
 
 {% block body %}
 
-            <div class="container px-5 my-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card border-0 rounded-3 shadow-lg">
-                <div class="card-body p-4">
-                    <div class="text-center">
-                    <h1 class="text-center text-primary mb-3">Modifier profil</h1>
-                     {{ include('profil/_form.html.twig', {'button_label': 'Modifier'}) }}
-                     {{ include('profil/_delete_form.html.twig') }}
+    <h1 class="text-center my-3 display-5" >Modifier mon profil</h1>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                {{ form_start(form) }}
+                    <div class="mb-3">
+                        <label for="edit_profile_user_form_prenomUser">Prénom</label>
+                        {{ form_widget(form.Prenom) }}
+                        <label for="edit_profile_user_form_ nomUser">Nom</label>
+                        {{ form_widget(form.Nom) }}
+                        <label for="edit_profile_user_form_email">Email</label>
+                        {{ form_widget(form.email) }}
+                        <label for="edit_profile_user_form_adresseUser">Adresse</label>
+                        {{ form_widget(form.Adresse) }}
+                        <label for="edit_profile_user_form_adresseUser">Tel</label>
+                        {{ form_widget(form.Tel) }}
+                        <label for="edit_profile_user_form_email"></label>
+                        {{ form_widget(form.plainPassword) }}
+                        
                     </div>
-                </div>
+                    <div>
+                        <input type="submit" value="Modifier" class="btn btn-outline-primary shadow ms-3">
+                        <a class="btn btn-outline-primary shadow ms-2" href="{{path('app_profil_index')}}">Retour</a>
+                    </div>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
-</div>
-
     
-
-    <a href="{{ path('app_profil_index') }}" class="btn btn-outline-primary btn-sm shadow">Retour a la liste</a>
-
-    
+{#     
+    <button class="btn btn-dark col-2 mt-2">{{ button_label|default('Enregistrer') }}</button> #}
 {% endblock %}
-

@@ -12,7 +12,6 @@
                 <th>Email</th>
                 <th>Nom</th>
                 <th>Prenom</th>
-                <th>Date de naissance</th>
                 <th>Adresse</th>
                 <th>Tel</th>
                 <th>Actions</th>
@@ -24,12 +23,12 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.Nom }}</td>
                 <td>{{ user.Prenom }}</td>
-                <td>{{ user.DateDeNaissance ? user.DateDeNaissance|date('Y-m-d') : '' }}</td>
                 <td>{{ user.Adresse }}</td>
                 <td>{{ user.Tel }}</td>
                 <td>
-                    <a href="{{ path('app_profil_show', {'id': user.id}) }}" class="btn btn-outline-primary btn-sm shadow">Infos</a>
+                    
                     <a href="{{ path('app_profil_edit', {'id': user.id}) }}" class="btn btn-outline-primary btn-sm shadow">Modifier</a>
+                    {{ include('profil/_delete_form.html.twig') }}
                 </td>
             </tr>
         </tbody>
