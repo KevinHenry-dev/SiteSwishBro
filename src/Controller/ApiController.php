@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Calendar;
 use DateTime;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,17 +22,15 @@ class ApiController extends AbstractController
     } */
 
     #[Route('/api/{id}/edit', name: 'api_event_edit', methods:['PUT'])]
-    public function majEvent(?Calendar $calendar, Request $request): Response
+    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $manager): Response
     {
         // recuperer les donnees
         $donnees = json_decode($request->getContent());
-
+    
         if(
             isset($donnees->title) && !empty($donnees->title) &&
-            isset($donnees->start) && !empty($donnees->start) &&
-            isset($donnees->description) && !empty($donnees->description) &&
-            isset($donnees->end) && !empty($donnees->end) &&
-            isset($donnees->allDay) && !empty($donnees->allDay) 
+         isset($donnees->start) && !empty($donnees->start) &&
+            isset($donnees->description) && !empty($donnees->description) 
         
         ){
             //les donnees sont completes
@@ -57,9 +57,8 @@ class ApiController extends AbstractController
             }
             $calendar->setAllDay($donnees->allDay);
             
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($calendar);
-            $entityManager->flush();
+            $manager->persist($calendar);
+            $manager->flush();
 
             // retourne le code 
             return new Response('Ok', $code);

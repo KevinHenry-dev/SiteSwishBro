@@ -57,7 +57,16 @@ class AdminUserController extends AbstractController
     #[Route('/{id}/edit', name: 'app_admin_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $checkbox = false;
+
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {//si l'utilisateur a le role admin, la checkbox passe a true et envoie l'info au formulaire
+            $checkbox = false;
+        }
+
+        $form = $this->createForm(UserType::class, $user,[
+            'admin'=>true,
+            'checkbox'=>$checkbox
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

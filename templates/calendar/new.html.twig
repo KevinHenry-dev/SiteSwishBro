@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Calendar{% endblock %}
+{% block title %}Events{% endblock %}
 
 {% block body %}
-    <h1>Create new Calendar</h1>
+    
 
-    {{ include('calendar/_form.html.twig') }}
-
-    <a href="{{ path('app_calendar_index') }}">back to list</a>
+<div class="container">
+    <h1 class="text-center">Créer évenement</h1>
+        {{ include('calendar/_form.html.twig') }}
+        <a href="{{ path('app_calendar_index') }}" class="btn btn-outline-primary shadow m-sm-2">Retour</a>
+</div>
 {% endblock %}
+
+

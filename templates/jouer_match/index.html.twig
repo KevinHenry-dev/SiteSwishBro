@@ -6,7 +6,7 @@
 {% block body %}
 
     <div id="calendrier">
-
+    <a href="{{ path('app_calendar_new') }}" class="btn btn-primary shadow"><i class="fa-solid fa-plus"></i> Créer un évenement</a>
     </div>
 {% endblock %}
 
@@ -17,6 +17,9 @@
 
         let calendar = new FullCalendar.Calendar(calendarElt, {
             initialView : 'dayGridMonth',
+            buttonText: { 
+                today: "Aujourd'hui", month: "Mois", week: "Semaine", prev: "Précédent", next: "Suivant" 
+                },
             locale: 'fr',
             timeZone: 'Europe/Paris',
             headerToolbar: {
@@ -27,20 +30,25 @@
             },
             events: {{ data|raw }},
             editable: true,
-            
+            selectable: true,
+            eventClick: function(info) {
+            alert('Event: ' + info.event.title);
+            }
         })
 
         calendar.on('eventChange', (e) => {
+            console.log(e)
             let url = `/api/${e.event.id}/edit`
             let donnees = {
                 "title": e.event.title,
                 "start": e.event.start,
                 "end": e.event.end,
                 "description": e.event.extendedProps.description,
-                "allDay": e.event.allDay
+                "allDay": e.event.allDay,
+
             }
             let xhr = new XMLHttpRequest()
-
+console.log(donnees)
             xhr.open('PUT', url)
             xhr.send(JSON.stringify(donnees))
         })
