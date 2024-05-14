@@ -2,21 +2,28 @@
 
 namespace App\Controller;
 
+use App\Entity\Calendar;
 use App\Repository\CalendarRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class JouerMatchController extends AbstractController
 {
     #[Route('/jouer', name: 'app_jouer_match')]
-    public function index(CalendarRepository $calendar): Response
+    public function index(CalendarRepository $calendarRepository): Response
     {
-        $events = $calendar->findAll();
+        $events = $calendarRepository->findAll();
 
-            $rdvs = [];
+        $rdvs = [];
 
-        foreach($events as $event){
+        foreach ($events as $event) {
+            $createdById = null;
+            $createdBy = $event->getCreatedBy();
+            if ($createdBy !== null) {
+                $createdById = $createdBy->getId();
+            }
+
             $rdvs[] = [
                 'id' => $event->getId(),
                 'start' => $event->getStart()->format('Y-m-d H:i:s'),
@@ -24,13 +31,12 @@ class JouerMatchController extends AbstractController
                 'title' => $event->getTitle(),
                 'description' => $event->getDescription(),
                 'allDay' => $event->isAllDay(),
+                'createdBy' => $createdById,
             ];
         }
 
-        
-        
         $data = json_encode($rdvs);
-        
+
         return $this->render('jouer_match/index.html.twig', compact('data'));
     }
 }

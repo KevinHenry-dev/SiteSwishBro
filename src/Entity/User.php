@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -52,6 +54,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?bool $ban = false;
+
+    #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'User')]
+    private Collection $calendars;
+
+    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'User')]
+    private Collection $reservations;
+
+    #[ORM\ManyToMany(targetEntity: Terrain::class, inversedBy: 'users')]
+    private Collection $Terrain;
+
+    #[ORM\ManyToMany(targetEntity: MatchBasket::class, inversedBy: 'users')]
+    private Collection $MatchBasket;
+
+    #[ORM\ManyToMany(targetEntity: Team::class, inversedBy: 'users')]
+    private Collection $Team;
+
+
+
+    
+
+    public function __construct()
+    {
+        $this->calendars = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+        $this->Terrain = new ArrayCollection();
+        $this->MatchBasket = new ArrayCollection();
+        $this->Team = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -194,4 +224,139 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Calendar>
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): static
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars->add($calendar);
+            $calendar->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): static
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getUser() === $this) {
+                $calendar->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservations>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservations $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservations $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Terrain>
+     */
+    public function getTerrain(): Collection
+    {
+        return $this->Terrain;
+    }
+
+    public function addTerrain(Terrain $terrain): static
+    {
+        if (!$this->Terrain->contains($terrain)) {
+            $this->Terrain->add($terrain);
+        }
+
+        return $this;
+    }
+
+    public function removeTerrain(Terrain $terrain): static
+    {
+        $this->Terrain->removeElement($terrain);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MatchBasket>
+     */
+    public function getMatchBasket(): Collection
+    {
+        return $this->MatchBasket;
+    }
+
+    public function addMatchBasket(MatchBasket $matchBasket): static
+    {
+        if (!$this->MatchBasket->contains($matchBasket)) {
+            $this->MatchBasket->add($matchBasket);
+        }
+
+        return $this;
+    }
+
+    public function removeMatchBasket(MatchBasket $matchBasket): static
+    {
+        $this->MatchBasket->removeElement($matchBasket);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Team>
+     */
+    public function getTeam(): Collection
+    {
+        return $this->Team;
+    }
+
+    public function addTeam(Team $team): static
+    {
+        if (!$this->Team->contains($team)) {
+            $this->Team->add($team);
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): static
+    {
+        $this->Team->removeElement($team);
+
+        return $this;
+    }
+
+
+ 
 }

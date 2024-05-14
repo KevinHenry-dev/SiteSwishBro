@@ -11,49 +11,76 @@
 {% endblock %}
 
 {% block javascripts %}
+<!-- HTML pour le formulaire de création d'événement -->
+<div id="eventFormModal" class="modal">
+    <form id="eventForm">
+        <label for="title">Titre:</label>
+        <input type="text" id="title" name="title" required><br>
+        <label for="start">Début:</label>
+        <input type="datetime-local" id="start" name="start" required><br>
+        <label for="end">Fin:</label>
+        <input type="datetime-local" id="end" name="end" required><br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea><br>
+        <button type="submit">Créer</button>
+    </form>
+</div>
+
 <script>
     window.onload = () => {
-        let calendarElt = document.querySelector("#calendrier")
+        let calendarElt = document.querySelector("#calendrier");
 
         let calendar = new FullCalendar.Calendar(calendarElt, {
             initialView : 'dayGridMonth',
             buttonText: { 
                 today: "Aujourd'hui", month: "Mois", week: "Semaine", prev: "Précédent", next: "Suivant" 
-                },
+            },
             locale: 'fr',
             timeZone: 'Europe/Paris',
             headerToolbar: {
                 start: 'dayGridMonth,timeGridWeek,today',
                 center: 'title',
                 end: 'prev,next',
-                
             },
             events: {{ data|raw }},
+            navLinks: true,
             editable: true,
             selectable: true,
+            selectHelper: true,
             eventClick: function(info) {
-            alert('Event: ' + info.event.title);
+                alert('Titre: ' + info.event.title + '\nDébut: ' + info.event.start + '\nDescription: ' + info.event.extendedProps.description);
+            },
+            select: function(info) {
+                // Afficher la boîte modale avec le formulaire de création d'événement
+                $('#eventFormModal').modal('show');
+
+                // Remplir le champ de début avec la date de début sélectionnée dans le calendrier
+                document.getElementById('start').value = info.startStr;
+
+                // Remplir le champ de fin avec la date de fin sélectionnée dans le calendrier
+                document.getElementById('end').value = info.endStr;
             }
-        })
+        });
 
         calendar.on('eventChange', (e) => {
-            console.log(e)
-            let url = `/api/${e.event.id}/edit`
+            console.log(e);
+            let url = `/api/${e.event.id}/edit`;
             let donnees = {
                 "title": e.event.title,
                 "start": e.event.start,
                 "end": e.event.end,
                 "description": e.event.extendedProps.description,
                 "allDay": e.event.allDay,
+                "createdBy": event.createdBy,
+            };
+            let xhr = new XMLHttpRequest();
+            console.log(donnees);
+            xhr.open('PUT', url);
+            xhr.send(JSON.stringify(donnees));
+        });
 
-            }
-            let xhr = new XMLHttpRequest()
-console.log(donnees)
-            xhr.open('PUT', url)
-            xhr.send(JSON.stringify(donnees))
-        })
-
-        calendar.render()
+        calendar.render();
     }
 </script>
+
 {% endblock %}

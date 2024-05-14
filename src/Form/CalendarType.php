@@ -22,15 +22,16 @@ class CalendarType extends AbstractType
                 'date_widget' => 'single_text',
                 'label' => 'Heure de début'
             ])
+            
             ->add('end', DateTimeType::class, [
                 'date_widget' => 'single_text',
                 'label' => 'Heure de fin'
             ])
             ->add('description')
             ->add('all_day', CheckboxType::class, [
-                'label' => 'Toute la journée'
-            ])
-        ;
+                'label' => 'Toute la journée',
+                'required' => false // case non obligatoire
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

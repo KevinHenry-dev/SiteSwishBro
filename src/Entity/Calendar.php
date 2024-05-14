@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\CalendarRepository;
+use App\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CalendarRepository;
 
 #[ORM\Entity(repositoryClass: CalendarRepository::class)]
 class Calendar
@@ -28,6 +29,14 @@ class Calendar
 
     #[ORM\Column]
     private ?bool $all_day = null;
+
+    #[ORM\ManyToOne(inversedBy: 'calendars')]
+    private ?User $User = null;
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->User;
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +99,18 @@ class Calendar
     public function setAllDay(bool $all_day): static
     {
         $this->all_day = $all_day;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
 
         return $this;
     }

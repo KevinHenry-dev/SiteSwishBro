@@ -46,7 +46,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="{{ path('app_calendar_index')}}">
                 
                 <i class="fa-solid fa-house-user"></i> Gestion des matchs
               </a>
@@ -94,7 +94,7 @@
                 
                 <th>Adresse</th>
                 <th>Tel</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -129,6 +129,8 @@
 
                         {% if user.ban %}checked{% endif %}
                     >
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Banir l'utilisateur</label>
+                </div>
                 </div>
 
                     <a href="{{ path('app_admin_user_show', {'id': user.id}) }}" class="btn btn-outline-primary btn-sm shadow">Infos</a>
