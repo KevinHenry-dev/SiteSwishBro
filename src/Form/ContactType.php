@@ -19,10 +19,24 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Nom', TextType::class)
-            ->add('Prenom', TextType::class)
+            ->add('Nom', TextType::class,[
+                'required' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrer votre nom',
+                    ]),
+                ],
+            ])
+            ->add('Prenom', TextType::class,[
+                'required' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrer votre prenom',
+                    ]),
+                ],
+            ])
             ->add('Email', EmailType::class, [
-                
+                'required' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrer votre Email',
@@ -30,6 +44,7 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('Subject', TextType::class, [
+                'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'minlenght' => '2',
@@ -39,6 +54,11 @@ class ContactType extends AbstractType
                 'label_attr' => [
                     'class' => 'form-label mt-4'
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrer votre sujet',
+                    ]),
+                ],
             ])
             ->add('message', TextareaType::class, [
                 'attr' => [
@@ -46,8 +66,14 @@ class ContactType extends AbstractType
 
                 ],
                 'label' => 'Description',
+                'required' => false,
                 'label_attr' => [
                     'class' => 'form-label mt-4'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrer votre message',
+                    ]),
                 ],
             ])
             ->add('submit', SubmitType::class, [

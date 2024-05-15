@@ -33,7 +33,7 @@
                             {% else %}
                                 <td>Utilisateur non trouvé</td>
                             {% endif %}
-                            {% if app.user %}
+                            {% if app.user and event.createdBy and event.createdBy.id == app.user.id %}
                             <td>
                                 <a href="{{ path('app_calendar_edit_user', {'id': event.id}) }}">Modifier</a>
                             </td>
