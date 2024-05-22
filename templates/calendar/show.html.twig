@@ -15,14 +15,17 @@
                         <th>Description</th>
                         <th>Toute la journée</th>
                         <th>Créer par</th>
+                        <th>Voir</th>
                         {% if app.user %}
-                        <th>Actions</th>
+                        <th>MAJ</th>
                         {% endif %}
+                        
                     </tr>
                 </thead>
                 <tbody>
                     {% for event in events %}
-                        <tr>
+                        
+                            
                             <td>{{ event.title }}</td>
                             <td>{{ event.start ? event.start|date('d/m/Y H:i:s') : '' }}</td>
                             <td>{{ event.end ? event.end|date('d/m/Y H:i:s') : '' }}</td>
@@ -33,23 +36,27 @@
                             {% else %}
                                 <td>Utilisateur non trouvé</td>
                             {% endif %}
+                            <td><a href="{{ path('app_calendar_show_id', {'id': event.id}) }}">Voir</a></td>
                             {% if app.user and event.createdBy and event.createdBy.id == app.user.id %}
                             <td>
-                                <a href="{{ path('app_calendar_edit_user', {'id': event.id}) }}">Modifier</a>
+                                <a href="{{ path('app_calendar_edit_user', {'id': event.id}) }}"> Mise à jour</a>
                             </td>
                             {% endif %}
+                            
                         </tr>
                     {% else %}
                         <tr>
                             <td colspan="7">Aucun enregistrement trouvé</td>
                         </tr>
+                        
                     {% endfor %}
+                    
                 </tbody>
             </table>
         </div>
-        <div class="text-center">
+        
             <a href="{{ path('home_swish') }}" class="btn btn-outline-primary shadow">Retour</a>
-        </div>
+        
     </div>
 {% endblock %}
 

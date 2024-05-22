@@ -58,8 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'User')]
     private Collection $calendars;
 
-    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'User')]
-    private Collection $reservations;
+
 
     #[ORM\ManyToMany(targetEntity: Terrain::class, inversedBy: 'users')]
     private Collection $Terrain;
@@ -70,6 +69,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Team::class, inversedBy: 'users')]
     private Collection $Team;
 
+    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'id_user')]
+    private Collection $reservations;
+
 
 
     
@@ -77,10 +79,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->calendars = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
+    
         $this->Terrain = new ArrayCollection();
         $this->MatchBasket = new ArrayCollection();
         $this->Team = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -255,35 +258,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Reservations>
-     */
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
-    }
 
-    public function addReservation(Reservations $reservation): static
-    {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations->add($reservation);
-            $reservation->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReservation(Reservations $reservation): static
-    {
-        if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
-            if ($reservation->getUser() === $this) {
-                $reservation->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Terrain>
@@ -353,6 +328,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeTeam(Team $team): static
     {
         $this->Team->removeElement($team);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservations>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservations $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setIdUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservations $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getIdUser() === $this) {
+                $reservation->setIdUser(null);
+            }
+        }
 
         return $this;
     }

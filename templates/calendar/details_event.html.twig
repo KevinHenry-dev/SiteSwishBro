@@ -19,23 +19,102 @@
                 <th>Fin</th>
                 <th>Description</th>
                 <th>Toute la journée</th>
+                <th>Participer</th>
             </tr>
         </thead>
         <tbody>
        
             
                 <tr>
-                    
+                    {% set nbReservations = 5 %}
                     <td>{{ event.id }}</td>
                     <td>{{ event.title }}</td>
                     <td>{{ event.start ? event.start|date('d/m/Y H:i:s') : '' }}</td>
                     <td>{{ event.end ? event.end|date('d/m/Y H:i:s') : '' }}</td>
                     <td>{{ event.description }}</td>
                     <td>{{ event.allDay ? 'Yes' : 'No' }}</td>
+                    <td>
+                      {% if app.user in event.reservations|map(reservation => reservation.getIdUser()) %}
+                      <div 
+                        id="reserver{{ event.id }}" 
+                        data-id="{{ event.id}}" 
+                        data-action="retirer"
+                        class="alert alert-warning w-100 my-2 checkReservation" 
+                        style="cursor:pointer"
+                      >
+                        Annuler la réservation
+                      </div>
+                      {% else %}
+                        {% if nbReservations < 10 %}
+                         <div    
+                          id="reserver{{ event.id }}" 
+                          data-id="{{ event.id}}" 
+                          data-action="ajouter"
+                          class="alert alert-success w-100 my-2 checkReservation" 
+                          style="cursor:pointer"
+                          >
+                          Reservé
+                         </div>
+                        {% else %}
+                           <div class="alert alert-danger w-100 my-2">
+                            Complet
+                          </div>
+                         {% endif %}
+                    {% endif %}
+                    </td>
                 </tr>
             
         </tbody>
     </table>
 
     <a href="{{ path('home_swish') }}" class="btn btn-outline-primary shadow">Retour</a>
+{% endblock %}
+
+{% block javascripts %}
+
+	<script>
+	// Attendre que le document soit complètement chargé avant d'exécuter le code
+document.addEventListener('DOMContentLoaded', () => {
+  // Sélectionner tous les éléments avec la classe 'checkReservation'
+  document.querySelectorAll('.checkReservation').forEach((element) => {
+    // Ajouter un écouteur d'événement 'click' pour chaque élément
+    element.addEventListener('click', (event) => {
+      // Récupérer l'ID du calendrier à partir de l'attribut data-id de l'élément cliqué
+      let calendarId = event.currentTarget.dataset.id;
+      // Récupérer l'action à partir de l'attribut data-action de l'élément cliqué
+      let action = event.currentTarget.dataset.action;
+      // Définir l'URL pour la requête fetch en utilisant une route Symfony
+      const url = '{{ path('app_participation') }}';
+      // Envoyer une requête POST à l'URL définie
+      fetch(url, {
+        method: 'POST', // Utiliser la méthode POST
+        headers: {
+          'Content-Type': 'application/json', // Spécifier le type de contenu comme JSON
+          'X-Requested-With': 'XMLHttpRequest' // Indiquer que c'est une requête AJAX
+        },
+        // Convertir les données en JSON et les inclure dans le corps de la requête
+        body: JSON.stringify({
+          calendarId: calendarId, // Inclure l'ID du calendrier
+          action: action, // Inclure l'action
+        }),
+      })
+        // Traiter la réponse et la convertir en JSON
+        .then(response => response.json())
+        // Gérer les données reçues
+        .then(data => {
+          if (data.success) {
+            // Si la réponse indique un succès, recharger la page
+            location.reload();
+          } else {
+            // Sinon, afficher un message d'erreur
+            alert(data.error || 'Une erreur est survenue');
+          }
+        })
+        // Gérer les erreurs de la requête
+        .catch(error => console.log('ERROR:', error));
+    });
+  });
+});
+
+	</script>
 {% endblock %}

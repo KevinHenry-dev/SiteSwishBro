@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CalendarRepository;
@@ -32,6 +34,14 @@ class Calendar
 
     #[ORM\ManyToOne(inversedBy: 'calendars')]
     private ?User $User = null;
+
+    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'id_calendar')]
+    private Collection $reservations;
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
 
     public function getCreatedBy(): ?User
     {
@@ -111,6 +121,36 @@ class Calendar
     public function setUser(?User $User): static
     {
         $this->User = $User;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservations>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservations $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setIdCalendar($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservations $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getIdCalendar() === $this) {
+                $reservation->setIdCalendar(null);
+            }
+        }
 
         return $this;
     }

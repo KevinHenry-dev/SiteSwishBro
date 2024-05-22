@@ -17,17 +17,18 @@ class Reservations
 
 
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Calendar $Calendar = null;
+
 
     #[ORM\ManyToMany(targetEntity: Terrain::class, inversedBy: 'reservations')]
     private Collection $Terrain;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?MatchBasket $MatchBasket = null;
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    private ?User $id_user = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
-    private ?User $User = null;
+    private ?Calendar $id_calendar = null;
+
+
 
     public function __construct()
     {
@@ -39,17 +40,7 @@ class Reservations
         return $this->id;
     }
 
-    public function getCalendar(): ?Calendar
-    {
-        return $this->Calendar;
-    }
 
-    public function setCalendar(?Calendar $Calendar): static
-    {
-        $this->Calendar = $Calendar;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Terrain>
@@ -75,27 +66,31 @@ class Reservations
         return $this;
     }
 
-    public function getMatchBasket(): ?MatchBasket
+    public function getIdUser(): ?User
     {
-        return $this->MatchBasket;
+        return $this->id_user;
     }
 
-    public function setMatchBasket(?MatchBasket $MatchBasket): static
+    public function setIdUser(?User $id_user): static
     {
-        $this->MatchBasket = $MatchBasket;
+        $this->id_user = $id_user;
 
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getIdCalendar(): ?Calendar
     {
-        return $this->User;
+        return $this->id_calendar;
     }
 
-    public function setUser(?User $User): static
+    public function setIdCalendar(?Calendar $id_calendar): static
     {
-        $this->User = $User;
+        $this->id_calendar = $id_calendar;
 
         return $this;
     }
+
+
+
+
 }

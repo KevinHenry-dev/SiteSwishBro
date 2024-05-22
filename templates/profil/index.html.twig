@@ -16,7 +16,7 @@
                 <th>Prenom</th>
                 <th>Adresse</th>
                 <th>Tel</th>
-                <th>Actions</th>
+                <th>Mise à jour</th>
             </tr>
         </thead>
         <tbody>
@@ -29,15 +29,16 @@
                 <td>{{ user.Tel }}</td>
                 <td>
                     
-                    <a href="{{ path('app_profil_edit', {'id': user.id}) }}" class="btn btn-outline-primary btn-sm shadow">Modifier</a>
-                    {{ include('profil/_delete_form.html.twig') }}
+                    <a href="{{ path('app_profil_edit', {'id': user.id}) }}" class="btn btn-warning btn-sm shadow">Modifier</a>
+                    {# {{ include('profil/_delete_form.html.twig') }} #}
                 </td>
             </tr>
         </tbody>
     </table>
   </div>
+  <a href="{{ path('home_swish') }}" class="btn btn-outline-primary btn-sm shadow">Retour</a>
 </div>
 
 
-    <a href="{{ path('home_swish') }}" class="btn btn-outline-primary shadow m-sm-2">Retour</a>
+    
 {% endblock %}

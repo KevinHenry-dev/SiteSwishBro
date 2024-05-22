@@ -1,10 +1,9 @@
-{# NAVBAR #}
-
+        <!--NAVBAR -->
 <div>
   <div class="container-fluid" role="navigation">
     <div class="row text-center align-items-center g-0">
-      
-      <div class="col-lg-5 col-md-5 d-lg-block d-md-block d-sm-none ms-auto">
+      <!-- LIENS DE NAVIGATION -->
+      <div class="col-lg-5 col-md-5 col-sm-12">
         <div class="d-flex justify-content-around border-top border-bottom border-primary border-2">
           <div class="customLink"><a class="d-inline-block p-3" href="{{ path('home_swish')}}">Accueil</a></div>
           <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_calendar_show') }}">Événement</a></div>
@@ -16,14 +15,16 @@
           {% endif %}
         </div>
       </div>
-
-      <div class="col-lg-2 col-md-2 mx-auto text-center">
+      
+      <!-- LOGO -->
+      <div class="col-lg-2 col-md-2 col-sm-12 mx-auto text-center">
         <a class="navbar-brand" href="{{ path('home_swish') }}">
           <img src="{{ asset('images/newlogo.png')}}" style="width: 100px;" /> 
         </a>
       </div>
-
-      <div class="col-lg-5 col-md-5 d-lg-block d-md-block d-sm-none me-auto">
+      
+      <!-- LIENS DE CONNEXION ET DE PROFIL -->
+      <div class="col-lg-5 col-md-5 col-sm-12">
         <div class="d-flex justify-content-around border-top border-bottom border-primary border-2">
           {% if is_granted('IS_AUTHENTICATED_FULLY') %}
           <div class="customLink"><a class="d-inline-block p-3" href="{{path('app_profil_index')}}">Mon profil</a></div>
