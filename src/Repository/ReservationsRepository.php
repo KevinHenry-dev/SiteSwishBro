@@ -21,6 +21,15 @@ class ReservationsRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservations::class);
     }
 
+    public function countByCalendar($calendar)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->where('r.id_calendar = :calendar')
+            ->setParameter('calendar', $calendar)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 //    /**
 //     * @return Reservations[] Returns an array of Reservations objects
 //     */

@@ -21,6 +21,16 @@ class CalendarRepository extends ServiceEntityRepository
         parent::__construct($registry, Calendar::class);
     }
 
+    public function findFutureEvents(\DateTimeInterface $currentDate): array
+{
+    return $this->createQueryBuilder('c')
+        ->andWhere('c.start >= :currentDate')
+        ->setParameter('currentDate', $currentDate)
+        ->getQuery()
+        ->getResult();
+}
+
+
 //    /**
 //     * @return Calendar[] Returns an array of Calendar objects
 //     */

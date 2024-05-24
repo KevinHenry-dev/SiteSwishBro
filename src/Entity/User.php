@@ -58,8 +58,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'User')]
     private Collection $calendars;
 
-
-
     #[ORM\ManyToMany(targetEntity: Terrain::class, inversedBy: 'users')]
     private Collection $Terrain;
 
@@ -79,7 +77,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->calendars = new ArrayCollection();
-    
         $this->Terrain = new ArrayCollection();
         $this->MatchBasket = new ArrayCollection();
         $this->Team = new ArrayCollection();

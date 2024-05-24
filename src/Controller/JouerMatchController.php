@@ -7,13 +7,16 @@ use App\Repository\CalendarRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class JouerMatchController extends AbstractController
 {
     #[Route('/jouer', name: 'app_jouer_match')]
-    public function index(CalendarRepository $calendarRepository): Response
+    public function index(CalendarRepository $calendarRepository, Request $request): Response
     {
-        $events = $calendarRepository->findAll();
+        $currentDate = new \DateTime();
+
+        $events = $calendarRepository->findFutureEvents($currentDate);
 
         $rdvs = [];
 

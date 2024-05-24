@@ -37,10 +37,14 @@ class Terrain
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'Terrain')]
     private Collection $users;
 
+    #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'Terrain')]
+    private Collection $calendars;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->calendars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -48,17 +52,17 @@ class Terrain
         return $this->id;
     }
 
-    public function getNomTdb(): ?string
-    {
-        return $this->Nom_tdb;
-    }
+ public function getNomTdb(): ?string
+{
+    return $this->Nom_tdb;
+}
 
-    public function setNomTdb(string $Nom_tdb): static
-    {
-        $this->Nom_tdb = $Nom_tdb;
+public function setNomTdb(string $nomTdb): static
+{
+    $this->Nom_tdb = $nomTdb;
+    return $this;
+}
 
-        return $this;
-    }
 
     public function getAdresseTdb(): ?string
     {
@@ -157,6 +161,36 @@ class Terrain
     {
         if ($this->users->removeElement($user)) {
             $user->removeTerrain($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Calendar>
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): static
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars->add($calendar);
+            $calendar->setTerrain($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): static
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getTerrain() === $this) {
+                $calendar->setTerrain(null);
+            }
         }
 
         return $this;

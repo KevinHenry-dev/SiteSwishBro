@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use App\Entity\Terrain;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -37,6 +38,11 @@ class Calendar
 
     #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'id_calendar')]
     private Collection $reservations;
+
+    #[ORM\ManyToOne(inversedBy: 'calendars')]
+    private ?Terrain $Terrain = null;
+
+
 
     public function __construct()
     {
@@ -125,6 +131,8 @@ class Calendar
         return $this;
     }
 
+
+
     /**
      * @return Collection<int, Reservations>
      */
@@ -151,6 +159,18 @@ class Calendar
                 $reservation->setIdCalendar(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTerrain(): ?Terrain
+    {
+        return $this->Terrain;
+    }
+
+    public function setTerrain(?Terrain $Terrain): static
+    {
+        $this->Terrain = $Terrain;
 
         return $this;
     }

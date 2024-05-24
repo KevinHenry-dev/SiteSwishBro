@@ -44,7 +44,6 @@
             },
             events: {{ data|raw }},
             editable: true,
-            selectable: true,
             selectHelper: true,
             eventClick: function(info) {
                 alert('Titre: ' + info.event.title + '\nDébut: ' + info.event.start + '\nDescription: ' + info.event.extendedProps.description);
@@ -70,7 +69,7 @@
                 "end": e.event.end,
                 "description": e.event.extendedProps.description,
                 "allDay": e.event.allDay,
-                "createdBy": event.createdBy,
+                "createdBy": e.event.extendedProps.createdBy,
             };
             let xhr = new XMLHttpRequest();
             console.log(donnees);

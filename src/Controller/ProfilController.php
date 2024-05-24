@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Reservations;
 use App\Entity\User;
 
 
 use App\Form\EditProfileUserFormType;
-
+use App\Repository\ReservationsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,16 +94,49 @@ private function upgradePassword(User $user, string $hashedPassword, EntityManag
 }
 
 
-
-    #[Route('/{id}', name: 'app_profil_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    #[Route('/supprimer', name: 'app_profil_delete', methods: ['POST'])]
+    public function delete(Request $request, EntityManagerInterface $entityManager, ReservationsRepository $reservationsRepository): Response
     {
+        // Vérification si l'utilisateur est authentifié
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login'); // Rediriger vers la page de connexion
+        }
         
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        $user = $this->getUser();
+    
+        // Vérification si l'utilisateur a un identifiant valide
+        if (!$user->getId()) {
+            return $this->redirectToRoute('app_register');
+        }
+    
+        // Vérification du token CSRF
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+            // Supprimer les enregistrements associés dans la table reservations
+            $reservations = $entityManager->getRepository(Reservations::class)->findBy(['id_user' => $user->getId()]);
+            foreach ($reservations as $reservation) {
+                $entityManager->remove($reservation);
+            }
+    
+            // Invalider le token de sécurité
+            $this->container->get('security.token_storage')->setToken(null);
+    
+            // Supprimer l'utilisateur de la base de données
             $entityManager->remove($user);
             $entityManager->flush();
+    
+            // Ajouter un message flash de succès
+            $this->addFlash('success', "{$user->getPrenom()} {$user->getNom()} a été supprimé!");
+    
+            // Rediriger vers la page d'accueil ou une autre page appropriée
+            return $this->redirectToRoute('home_swish', [], Response::HTTP_SEE_OTHER);
         }
-
-        return $this->redirectToRoute('app_register', [], Response::HTTP_SEE_OTHER);
+    
+        // En cas d'échec de la validation du token CSRF
+        $this->addFlash('error', 'Token CSRF invalide.');
+    
+        // Rediriger vers une page d'erreur ou de profil
+        return $this->redirectToRoute('app_profil_index');
     }
+    
 }
+

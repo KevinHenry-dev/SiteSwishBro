@@ -10,19 +10,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
+
 
 class RegistrationController extends AbstractController
 {
     #[Route('/inscription', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        // Instance de l'entité User
         $user = new User();
+        
+        // Création du formulaire d'inscription 
         $form = $this->createForm(RegistrationFormType::class, $user);
+        
+        // Soumission du formulaire et des données associées à la requête
         $form->handleRequest($request);
 
+        // Vérification si le formulaire a été soumis et est valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            // Hasher le mot de passe brut avant de le stocker dans l'entité User
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -30,15 +36,18 @@ class RegistrationController extends AbstractController
                 )
             );
             
+            // Envoi de l'utilisateur dans la base de données
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
-            $this->addFlash('success','Inscription validée');
+            
+            // Redirection vers la page de connexion 
             return $this->redirectToRoute('app_login');
         }
 
+        // Template d'inscription avec le formulaire
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
 }
+

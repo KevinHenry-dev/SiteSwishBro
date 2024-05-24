@@ -3,7 +3,7 @@
 {% block title %}Parametre profil{% endblock %}
 
 {% block body %}
-    <h1 class="text-center">Profil</h1>
+    <h1 class="text-center">Mon compte</h1>
 
 <div class="container-fluid">
   <div class="table-responsive">
@@ -30,7 +30,7 @@
                 <td>
                     
                     <a href="{{ path('app_profil_edit', {'id': user.id}) }}" class="btn btn-warning btn-sm shadow">Modifier</a>
-                    {# {{ include('profil/_delete_form.html.twig') }} #}
+                    {{ include('profil/_delete_form.html.twig') }} 
                 </td>
             </tr>
         </tbody>

@@ -25,3 +25,7 @@ services:
     App\Entity\:
         resource: '../src/Entity/'
 
+     # Inject ManagerRegistry into CalendarController
+    App\Controller\CalendarController:
+        arguments: ['@doctrine']
+

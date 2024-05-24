@@ -55,7 +55,10 @@ class ReservationController extends AbstractController
 
         $entityManager->flush();
 
-        return new JsonResponse(['success' => true]);
+        // Compter le nombre de participants
+        $numberOfParticipants = $reservationsRepository->countByCalendar($calendar);
+
+        return new JsonResponse(['success' => true, 'participants' => $numberOfParticipants]);
 
         
     }
