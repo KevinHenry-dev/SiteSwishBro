@@ -42,7 +42,6 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('Date_de_naissance')
             ->add('Adresse')
             ->add('Tel')
         ;
