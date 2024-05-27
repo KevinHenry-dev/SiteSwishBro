@@ -3,13 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
-
-use App\Form\UserType;
+use App\Form\EditProfileUserFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin/user')]
@@ -18,6 +17,7 @@ class AdminUserController extends AbstractController
     #[Route('/', name: 'app_admin_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
+        // Utilisation du repository pour récupérer tous les utilisateurs
         return $this->render('admin_user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
@@ -28,10 +28,10 @@ class AdminUserController extends AbstractController
     {
         $user = new User();
 
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(EditProfileUserFormType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            // Sauvegarde du nouvel utilisateur
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -49,6 +49,7 @@ class AdminUserController extends AbstractController
     #[Route('/{id}', name: 'app_admin_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
+        // Affichage des détails d'un utilisateur
         return $this->render('admin_user/show.html.twig', [
             'user' => $user,
         ]);
@@ -57,16 +58,7 @@ class AdminUserController extends AbstractController
     #[Route('/{id}/edit', name: 'app_admin_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        $checkbox = false;
-
-        if (in_array("ROLE_ADMIN", $user->getRoles())) {//si l'utilisateur a le role admin, la checkbox passe a true et envoie l'info au formulaire
-            $checkbox = false;
-        }
-
-        $form = $this->createForm(UserType::class, $user,[
-            'admin'=>true,
-            'checkbox'=>$checkbox
-        ]);
+        $form = $this->createForm(EditProfileUserFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -77,7 +69,7 @@ class AdminUserController extends AbstractController
 
         return $this->render('admin_user/edit.html.twig', [
             'user' => $user,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -85,6 +77,7 @@ class AdminUserController extends AbstractController
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            // Suppression de l'utilisateur
             $entityManager->remove($user);
             $entityManager->flush();
         }

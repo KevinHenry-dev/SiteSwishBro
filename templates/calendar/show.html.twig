@@ -27,44 +27,48 @@
                     </tr>
                 </thead>
                 <tbody>
-                        {% for event in events %}
-                    {% if event.start|date("Y-m-d") >= "now"|date("Y-m-d") %} <!--Tout les éléments passés a la date du jour ne seront pas affichés-->
-                    <tr>
-                    {% if is_granted('ROLE_ADMIN') %} <td>{{ event.id }}</td> {% endif %}
-
-                    <td>{{ event.title }}</td>
-                    <td>{{ event.start ? event.start|date('d/m/Y H:i:s') : '' }}</td>
-                    <td>{{ event.end ? event.end|date('d/m/Y H:i:s') : '' }}</td>
-                    <td>{{ event.description }}</td>
-
-                    {% if event.terrain is not null %}
-                        <td>{{ event.terrain.getNomTdb() ~ ' - ' ~ event.terrain.getAdresseTdb() ~ ' - ' ~ event.terrain.getLibelleVille() }}</td>
-                    {% else %}
-                        <td>Pas de terrain associé</td>
-                    {% endif %}
-
-                    <td>{{ event.allDay ? 'Yes' : 'No' }}</td>
-
-                    <td>{{ event.reservations|length }}</td> <!-- Affiche le  nombre de participants -->
-
-                    <td><a href="{{ path('app_calendar_show_id', {'id': event.id}) }}">Voir</a></td>
-
-                    {% if event.createdBy is not null %}
-                        <td>{{ event.createdBy.prenom }}</td>
-                    {% else %}
-                        <td>Utilisateur non trouvé</td>
-                    {% endif %}
-
-                    {% if app.user and event.createdBy and event.createdBy.id == app.user.id %}
-                        <td><a href="{{ path('app_calendar_edit_user', {'id': event.id}) }}">Mise à jour</a></td>
-                    {% endif %}
-                </tr>
+{# Boucle sur la liste des événements #}
+{% for event in events %}
+    {% if event.start|date("Y-m-d") >= "now"|date("Y-m-d") %} 
+        <!-- Tous les événements passés jusqu'à aujourd'hui ne seront pas affichés -->
+        <tr>
+            {# l'ID de l'événement si l'utilisateur a le rôle administrateur #}
+            {% if is_granted('ROLE_ADMIN') %} 
+                <td>{{ event.id }}</td> 
             {% endif %}
-        {% else %}
-            <tr>
-                <td colspan="8">Aucun enregistrement trouvé</td>
-            </tr>
-        {% endfor %}
+            <td>{{ event.title }}</td>
+            {# date et l'heure de début de l'événement #}
+            <td>{{ event.start ? event.start|date('d/m/Y H:i:s') : '' }}</td>
+            {# date et l'heure de fin de l'événement #}
+            <td>{{ event.end ? event.end|date('d/m/Y H:i:s') : '' }}</td>
+            <td>{{ event.description }}</td>
+            {# Vérifie si un terrain est associé à l'événement et affiche ses détails #}
+            {% if event.terrain is not null %}
+                <td>{{ event.terrain.getNomTdb() ~ ' - ' ~ event.terrain.getAdresseTdb() ~ ' - ' ~ event.terrain.getLibelleVille() }}</td>
+            {% else %}
+                <td>Pas de terrain associé</td>
+            {% endif %}
+            <td>{{ event.allDay ? 'Yes' : 'No' }}</td>
+            {# le nombre de participants à l'événement #}
+            <td>{{ event.reservations|length }}</td>
+            <td><a href="{{ path('app_calendar_show_id', {'id': event.id}) }}">Voir</a></td>
+            {#  prénom de l'utilisateur qui a créé l'événement #}
+            {% if event.createdBy is not null %}
+                <td>{{ event.createdBy.prenom }}</td>
+            {% else %}
+                <td>Utilisateur non trouvé</td>
+            {% endif %}
+            {# Si l'utilisateur actuel a créé l'événement, affiche un lien pour le mettre à jour #}
+            {% if app.user and event.createdBy and event.createdBy.id == app.user.id %}
+                <td><a href="{{ path('app_calendar_edit_user', {'id': event.id}) }}">Mise à jour</a></td>
+            {% endif %}
+        </tr>
+    {% endif %}
+{% else %}
+    <tr>
+        <td colspan="8">Aucun enregistrement trouvé</td>
+    </tr>
+{% endfor %}
 
                 </tbody>
             </table>

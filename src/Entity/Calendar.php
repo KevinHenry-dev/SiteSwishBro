@@ -33,11 +33,12 @@ class Calendar
     #[ORM\Column]
     private ?bool $all_day = null;
 
-    #[ORM\ManyToOne(inversedBy: 'calendars')]
+    #[ORM\ManyToOne(inversedBy: 'calendars', cascade: ["remove"])]
     private ?User $User = null;
-
-    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'id_calendar')]
+    
+    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'id_calendar', cascade: ["remove"])]
     private Collection $reservations;
+    
 
     #[ORM\ManyToOne(inversedBy: 'calendars')]
     private ?Terrain $Terrain = null;

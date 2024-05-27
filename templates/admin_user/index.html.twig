@@ -23,9 +23,7 @@
     </li>
   </ul>
 
-
 </header>
-
 
 <div class="container-fluid">
   <div class="row">
@@ -53,14 +51,10 @@
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="#">
-                
-                <i class="fa-solid fa-house-user"></i> Gestion des commentaires
+                  <i class="fa-solid fa-house-user"></i> Gestion des commentaires
               </a>
             </li>
-
-
           <hr class="my-3">
-
           <ul class="nav flex-column mb-auto">
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="{{path('app_admin_dashboard')}}">
@@ -91,7 +85,6 @@
                 <th>Roles</th>
                 <th>Nom</th>
                 <th>Prenom</th>
-                
                 <th>Adresse</th>
                 <th>Tel</th>
                 <th>Actions</th>
@@ -111,13 +104,11 @@
                         {% endif %}
                     {% endfor %}
                 </td>
-                 <td>{{ user.Nom }}</td>
+                <td>{{ user.Nom }}</td>
                 <td>{{ user.Prenom }}</td>
                 <td>{{ user.Adresse }}</td>
                 <td>{{ user.Tel }}</td>
                 <td>
-
-
                 {#banissement des users#}
                 <div class="form-check form-switch">
                     <input 
@@ -126,15 +117,12 @@
                         role="switch" 
                         id="flexSwitchCheckDefault"
                         value="{{user.id}}"{#valeur de input est l'id de l'utilisateur#}
-
                         {% if user.ban %}checked{% endif %}
                     >
                     <label class="form-check-label" for="flexSwitchCheckDefault">Banir l'utilisateur</label>
                 </div>
                 </div>
-
                     <a href="{{ path('app_admin_user_show', {'id': user.id}) }}" class="btn btn-outline-primary btn-sm shadow">Infos</a>
-                    
                 </td>
             </tr>
         {% else %}
@@ -147,7 +135,6 @@
     </div>
     <a href="{{ path('app_admin_user_new') }}"class="btn btn-outline-primary shadow"><i class="fa-solid fa-plus"></i> Nouveau membre</a>
 {% endblock %}
-
 {#block js pour banir les users#}
 {% block javascripts %}
 <script>
@@ -156,17 +143,14 @@
     console.log(checkBan)
     checkBan.change(function(){
         //$(this.val())//ici on récupère la valeur de la checkbox qu'on a changé
-
         let data ={
             'id': $(this).val()
         }
         //configuration de l'ajax avec ses 4 paramètres(méthode, type de la donnée, à quelle url on en envoit, et ce qu'on envoit )
         //principe ajax: aller sur la route d"un controleur(aller sur la partie back-end) tout en restant en front(on ne va pas changer de route, on ne va pas etre redirigé vers une autre route)
         //l'ajax va exécuter le code en back-end et il revient
-
         //lorsqu'on lance une des checkBox, la function change se lance==>ajax se lance
-        
-        $.ajax({
+                $.ajax({
             method:'post',
             dataType:'json',
             url:"{{path('app_ajax_user_ban')}}",
