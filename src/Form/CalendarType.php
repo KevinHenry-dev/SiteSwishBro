@@ -39,12 +39,9 @@ class CalendarType extends AbstractType
                 'label' => 'Terrain',
                 'required' => false,
                 'placeholder' => 'Sélectionner un terrain',
-            ])
-
-            ->add('all_day', CheckboxType::class, [
-                'label' => 'Toute la journée',
-                'required' => false // case non obligatoire
             ]);
+
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

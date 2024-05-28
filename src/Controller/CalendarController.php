@@ -78,7 +78,7 @@ class CalendarController extends AbstractController
                 'end' => $event->getEnd()->format('Y-m-d H:i:s'),
                 'title' => $event->getTitle(),
                 'description' => $event->getDescription(),
-                'allDay' => $event->isAllDay(),
+                
             ];
         }
     

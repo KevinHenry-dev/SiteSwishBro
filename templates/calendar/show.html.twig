@@ -17,7 +17,6 @@
                         <th>Fin</th>
                         <th>Description</th>
                         <th>Terrain</th>
-                        <th>Journée</th>
                         <th>Participants</th> 
                         <th>Voir</th>
                         <th>Créer par</th>
@@ -48,8 +47,6 @@
             {% else %}
                 <td>Pas de terrain associé</td>
             {% endif %}
-            <td>{{ event.allDay ? 'Yes' : 'No' }}</td>
-            {# le nombre de participants à l'événement #}
             <td>{{ event.reservations|length }}</td>
             <td><a href="{{ path('app_calendar_show_id', {'id': event.id}) }}">Voir</a></td>
             {#  prénom de l'utilisateur qui a créé l'événement #}

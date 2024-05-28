@@ -30,8 +30,7 @@ class Calendar
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?bool $all_day = null;
+    
 
     #[ORM\ManyToOne(inversedBy: 'calendars', cascade: ["remove"])]
     private ?User $User = null;
@@ -108,17 +107,7 @@ class Calendar
         return $this;
     }
 
-    public function isAllDay(): ?bool
-    {
-        return $this->all_day;
-    }
 
-    public function setAllDay(bool $all_day): static
-    {
-        $this->all_day = $all_day;
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {

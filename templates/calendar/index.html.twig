@@ -89,7 +89,6 @@
                 <th>Début</th>
                 <th>Fin</th>
                 <th>Description</th>
-                <th>Toute la journée</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -101,7 +100,6 @@
                 <td>{{ calendar.start ? calendar.start|date('d/m/Y H:i:s') : '' }}</td>
                 <td>{{ calendar.end ? calendar.end|date('d/m/Y H:i:s') : '' }}</td>
                 <td>{{ calendar.description }}</td>
-                <td>{{ calendar.allDay ? 'Yes' : 'No' }}</td>
                 <td>
                     <a href="{{ path('app_calendar_show_id', {'id': calendar.id}) }}">Infos</a>
                     <a href="{{ path('app_calendar_edit', {'id': calendar.id}) }}">Modifier</a>

@@ -31,7 +31,7 @@ class UserType extends AbstractType
                 'second_options' => ['label' => 'Répétez le mot de passe'],
                 'constraints' => [
                     new Length([
-                        'min' => 8,
+                        'min' => 12,
                         'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères.',
                         'max' => 4096,
                         'maxMessage' => 'Le mot de passe ne doit pas dépasser {{ limit }} caractères.',
@@ -42,6 +42,7 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
+            
             ->add('Adresse')
             ->add('Tel')
         ;

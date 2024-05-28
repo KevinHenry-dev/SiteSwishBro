@@ -20,7 +20,6 @@
                 <th>Fin</th>
                 <th>Description</th>
                 <th>Terrain</th>
-                <th>Journée</th>
                 <th>Participants</th>
                 <th>Participer</th>
                 
@@ -43,7 +42,6 @@
                             {% else %}
                             <td>Pas de terrain associé</td>
                             {% endif %}
-                    <td>{{ event.allDay ? 'Yes' : 'No' }}</td>
                     <td>{{ nbReservations }}</td>
                     <td>
                       {% if app.user in event.reservations|map(reservation => reservation.getIdUser()) %}
@@ -54,7 +52,7 @@
                         class="alert alert-warning w-100 my-2 checkReservation" 
                         style="cursor:pointer"
                       >
-                        Annuler la réservation
+                        Annuler la participation
                       </div>
                       {% elseif nbReservations >= 10 %}
                         <div class="alert alert-danger w-100 my-2">
@@ -68,11 +66,10 @@
                           class="alert alert-success w-100 my-2 checkReservation" 
                           style="cursor:pointer"
                           >
-                          Reservé
+                          Participé
                         </div>
                       {% endif %}
-                    </td>
-                     
+                    </td>                     
                 </tr>
             
         </tbody>
