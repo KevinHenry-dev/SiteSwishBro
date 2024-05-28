@@ -12,3 +12,11 @@ body {
 .container {
     flex: 1;
 }
+
+
+main{
+    min-height: 90vh;
+}
+#footer{
+    height:5vh;
+}

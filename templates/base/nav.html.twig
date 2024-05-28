@@ -6,9 +6,9 @@
       <div class="col-lg-5 col-md-5 col-sm-12">
         <div class="d-flex justify-content-around border-top border-bottom border-primary border-2">
           <div class="customLink"><a class="d-inline-block p-3" href="{{ path('home_swish')}}">Accueil</a></div>
-          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_calendar_show') }}">Événement</a></div>
+          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_calendar_show') }}">Participer</a></div>
           {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_jouer_match')}}">Jouer</a></div>
+          <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_jouer_match')}}">Créer un évènement</a></div>
           {% endif %} 
           {% if is_granted('ROLE_ADMIN') %}
           <div class="customLink"><a class="d-inline-block p-3" href="{{ path('app_admin_dashboard')}}">Dashboard</a></div>
