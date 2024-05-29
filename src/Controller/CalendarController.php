@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/calendar')]
+#[Route('profil/calendar')]
 class CalendarController extends AbstractController
 {
     private $managerRegistry;

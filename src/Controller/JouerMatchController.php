@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class JouerMatchController extends AbstractController
 {
-    #[Route('/jouer', name: 'app_jouer_match')]
+    #[Route('profil/jouer', name: 'app_jouer_match')]
     public function index(CalendarRepository $calendarRepository, Request $request): Response
     {
         $currentDate = new \DateTime();
